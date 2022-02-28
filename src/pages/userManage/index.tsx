@@ -105,6 +105,17 @@ const UserManage = () => {
       }
     },
     {
+      title: '修改信息',
+      dataIndex: 'updatedAt',
+      valueType: 'dateTime',
+      render: (value, record) => {
+        return (<>
+        <span>{record.modifier}</span><br></br>
+        <span>{value}</span>
+        </>)
+      }
+    },
+    {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
