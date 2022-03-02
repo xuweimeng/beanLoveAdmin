@@ -1,12 +1,34 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
-import { Button, message, Input, Drawer } from 'antd';
+import type { ProFormInstance } from '@ant-design/pro-form';
+import { 
+  Button, 
+  message, 
+  Input, 
+  Drawer, 
+  Typography,
+  Popconfirm
+} from 'antd';
 import type { TableListItem, TableListPagination } from './data';
+import CreatePanel from './components/CreatePanel';
 
 const UserManage = () => {
+  
+  const formRef = useRef<ProFormInstance<TableListItem>|undefined>(undefined);
+
+  const [showDrawer, setShowDrawer]=useState<boolean>(false);
+
+  // 删除操作
+  const confirmDelete = () => {
+    message.success('删除成功！')
+  }
+  // 取消删除
+  const cancelDelete = () => {
+    message.error('取消删除！')
+  }
 
   const columns: ProColumns<TableListItem>[] = [
     {
@@ -14,12 +36,7 @@ const UserManage = () => {
       dataIndex: 'name',
       render: (dom, entity) => {
         return (
-          <a
-            // onClick={() => {
-            //   setCurrentRow(entity);
-            //   setShowDetail(true);
-            // }}
-          >
+          <a>
             {dom}
           </a>
         );
@@ -28,13 +45,13 @@ const UserManage = () => {
     {
       title: '描述',
       dataIndex: 'describe',
-      valueType: 'textarea',
+      hideInForm: true,
+      hideInSearch: true
     },
     {
       title: '性别',
       dataIndex: 'sex',
       sorter: true,
-      hideInForm: true,
       valueEnum: {
         'male': {
           text: '男',
@@ -48,12 +65,12 @@ const UserManage = () => {
       title: '年龄',
       dataIndex: 'age',
       hideInForm: true,
+      hideInSearch: true
     },
     {
       title: '婚姻状况',
       dataIndex: 'marrary',
       sorter: true,
-      hideInForm: true,
       valueEnum: {
         'unmarried': {
           text: '未婚',
@@ -68,6 +85,7 @@ const UserManage = () => {
     {
       title: '实名认证',
       dataIndex: 'authentication',
+      hideInForm: true,
       valueEnum: {
         true: {
           text: '是',
@@ -81,22 +99,23 @@ const UserManage = () => {
     },
     {
       title: '工作地',
+      hideInForm: true,
+      hideInSearch: true,
       dataIndex: 'workplaceProvince',
       render: (val, record) => <span>{val} - {record.workplaceCity}</span>
     },
     {
       title: '户籍',
       dataIndex: 'householdProvince',
+      hideInForm: true,
+      hideInSearch: true,
       render: (val, record) => <span>{val} - {record.householdCity}</span>
-    },
-    {
-      title: '实名认证',
-
     },
     {
       title: '创建信息',
       dataIndex: 'updatedAt',
       valueType: 'dateTime',
+      hideInSearch: true,
       render: (value, record) => {
         return (<>
         <span>{record.creator}</span><br></br>
@@ -108,6 +127,8 @@ const UserManage = () => {
       title: '修改信息',
       dataIndex: 'updatedAt',
       valueType: 'dateTime',
+      hideInForm: true,
+      hideInSearch: true,
       render: (value, record) => {
         return (<>
         <span>{record.modifier}</span><br></br>
@@ -120,18 +141,16 @@ const UserManage = () => {
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
-        <a
-          key="config"
-          onClick={() => {
-            // handleUpdateModalVisible(true);
-            // setCurrentRow(record);
-          }}
+        <Typography.Link>编辑</Typography.Link>,
+        <Popconfirm
+          title="确定删除吗?"
+          onConfirm={confirmDelete}
+          onCancel={cancelDelete}
+          okText="确定"
+          cancelText="取消"
         >
-          配置
-        </a>,
-        <a key="subscribeAlert" href="https://procomponents.ant.design/">
-          订阅警报
-        </a>,
+        <Typography.Link>删除</Typography.Link>
+      </Popconfirm>
       ],
     },
   ];
@@ -141,6 +160,10 @@ const UserManage = () => {
       <ProTable<TableListItem, TableListPagination>
         headerTitle="查询表格"
         // actionRef={actionRef}
+        dataSource={[{
+          name: '李康',
+          id: 1
+        }]}
         rowKey="key"
         search={{
           labelWidth: 120,
@@ -149,12 +172,17 @@ const UserManage = () => {
           <Button
             type="primary"
             key="primary"
+            onClick={() => setShowDrawer(true)}
           >
             <PlusOutlined /> 新建
           </Button>,
         ]}
         // request={rule}
         columns={columns}
+      />
+      <CreatePanel
+        showDrawer={showDrawer}
+        formRef={formRef}
       />
     </PageContainer>
   );
