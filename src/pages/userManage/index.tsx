@@ -98,6 +98,11 @@ const UserManage = () => {
       }
     },
     {
+      title: '工作',
+      dataIndex: 'job',
+      hideInForm: true,
+    },
+    {
       title: '工作地',
       hideInForm: true,
       hideInSearch: true,
@@ -183,6 +188,7 @@ const UserManage = () => {
       <CreatePanel
         showDrawer={showDrawer}
         formRef={formRef}
+        onCloseCreatePanel={() => setShowDrawer(false)}
       />
     </PageContainer>
   );
