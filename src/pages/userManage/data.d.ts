@@ -12,7 +12,8 @@ export type TableListItem = {
   // householdCity: string; // 户籍-市
   // workplaceProvince: string; // 工作地-省
   // workplaceCity: string; // 工作地-市
-  // work: string; // 工作
+  // job: string; // 工作
+  // birthDate: Date;
   // height: number; // 身高
   // weight: number; // 体重
   // mobile: string; // 手机号
