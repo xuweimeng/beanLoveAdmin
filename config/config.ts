@@ -211,6 +211,13 @@ export default defineConfig({
       component: './userManage'
     },
     {
+      name: 'users-detail',
+      icon: 'user',
+      path: '/users/detail/:id/:command',
+      hideInMenu: true,
+      component: './userManage/detail'
+    },
+    {
       name: 'result',
       icon: 'CheckCircleOutlined',
       path: '/result',

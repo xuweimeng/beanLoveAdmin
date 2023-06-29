@@ -15,7 +15,7 @@ import {
 import type { TableListItem, TableListPagination } from './data';
 import CreatePanel from './components/CreatePanel';
 
-const UserManage = () => {
+const UserManage = (props: any) => {
   
   const formRef = useRef<ProFormInstance<TableListItem>|undefined>(undefined);
 
@@ -36,7 +36,7 @@ const UserManage = () => {
       dataIndex: 'name',
       render: (dom, entity) => {
         return (
-          <a>
+          <a onClick={() => setShowDrawer(true)}>
             {dom}
           </a>
         );
@@ -177,7 +177,10 @@ const UserManage = () => {
           <Button
             type="primary"
             key="primary"
-            onClick={() => setShowDrawer(true)}
+            // onClick={() => setShowDrawer(true)}
+            onClick={() => {
+              props.history.push('/users/detail/1/create')
+            }}
           >
             <PlusOutlined /> 新建
           </Button>,
